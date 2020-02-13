@@ -5,6 +5,7 @@ using MGPhysics;
 using MGPhysics.Components;
 using MGPhysics.Systems;
 using System;
+using System.Threading;
 using System.Collections.Generic;
 namespace ReeGame
 {
@@ -68,7 +69,10 @@ namespace ReeGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            int deltaTime = gameTime.ElapsedGameTime.Milliseconds / 10;
             IntVector velocity = new IntVector(0, 0);
+
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 velocity += new IntVector(0, -movementSpeed);
@@ -85,8 +89,7 @@ namespace ReeGame
             {
                 velocity += new IntVector(movementSpeed,0);
             }
-            PhysicsSystem.MoveEntity(palikka1.Key, velocity, ref positions, sizes);
-
+            PhysicsSystem.MoveEntity(palikka1.Key, velocity * deltaTime, ref positions, sizes);
             base.Update(gameTime);
         }
 
