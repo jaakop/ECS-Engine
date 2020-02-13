@@ -32,7 +32,7 @@ namespace ReeGame
         protected override void Initialize()
         {
             key = 0;
-            movementSpeed = 30;
+            movementSpeed = 5;
 
             sprites = new Dictionary<int, Sprite>();
             positions = new Dictionary<int, IntVector>();
@@ -45,7 +45,7 @@ namespace ReeGame
             palikka = CreateNewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(50, 200));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,50), new IntVector(500, 250));
+            CreatePalikka(palikka, new IntVector(100,50), new IntVector(400, 120));
 
             base.Initialize();
         }

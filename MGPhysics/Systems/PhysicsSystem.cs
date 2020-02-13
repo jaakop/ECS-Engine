@@ -24,6 +24,8 @@ namespace MGPhysics.Systems
                 //Check if the entity is the same as the entity that is being moved
                 if (entity.Key == entityKey)
                     continue;
+                
+                //Check if entity has an hitbox
                 if (!hitBoxes.ContainsKey(entity.Key))
                     continue;
 

@@ -12,6 +12,6 @@ namespace MGPhysics
         {
             Key = key;
         }
-        public int Key { get; set; }
+        public int Key { get; }
     }
 }
