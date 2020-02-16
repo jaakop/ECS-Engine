@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera2D.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Sprite.cs" />
     <Compile Include="Entity.cs" />

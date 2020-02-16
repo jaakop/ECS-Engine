@@ -13,7 +13,6 @@ namespace MGPhysics.Systems
     {
         public static void RenderSprites(Dictionary<int, Sprite> sprites, Dictionary<int, IntVector> positions, Dictionary<int, IntVector> sizes, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
             foreach(KeyValuePair<int, Sprite> sprite in sprites)
             {
                 IntVector position = new IntVector(0, 0);
@@ -24,7 +23,6 @@ namespace MGPhysics.Systems
                     size = sizes[sprite.Key];
                 spriteBatch.Draw(sprite.Value.Texture, new Rectangle(position.X - size.X/2, position.Y - size.Y/2, size.X, size.Y), sprite.Value.ColorMask);
             }
-            spriteBatch.End();
         }
     }
 }

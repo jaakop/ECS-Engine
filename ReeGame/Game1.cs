@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 using MGPhysics;
 using MGPhysics.Components;
 using MGPhysics.Systems;
-using System;
-using System.Threading;
-using System.Collections.Generic;
+
 namespace ReeGame
 {
     public class Game1 : Game
@@ -23,6 +24,8 @@ namespace ReeGame
 
         int movementSpeed;
 
+        Camera2D camera;
+
         public Game1()
         {
             
@@ -34,6 +37,8 @@ namespace ReeGame
         {
             key = 0;
             movementSpeed = 5;
+
+            camera = new Camera2D(new IntVector(0, 0), 0.5f);
 
             sprites = new Dictionary<int, Sprite>();
             positions = new Dictionary<int, IntVector>();
@@ -67,6 +72,7 @@ namespace ReeGame
 
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -90,15 +96,19 @@ namespace ReeGame
                 velocity += new IntVector(movementSpeed,0);
             }
             PhysicsSystem.MoveEntity(palikka1.Key, velocity * deltaTime, ref positions, sizes);
+
+            camera.Position = positions[palikka1.Key];
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetTransformationMatrix(GraphicsDevice.Viewport));
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
             RenderSystem.RenderSprites(sprites, positions, sizes, spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
 
