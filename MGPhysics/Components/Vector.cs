@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MGPhysics.Components
 {
-    public struct IntVector : Component
+    public struct IntVector : IComponent
     {
         public int X { get; set; }
         public int Y { get; set; }

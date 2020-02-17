@@ -45,13 +45,13 @@ namespace ReeGame
             sizes = new Dictionary<int, IntVector>();
             // TODO: Add your initialization logic here
             palikka1 = CreateNewEntity();
-            CreatePalikka(palikka1, new IntVector(100, 100), new IntVector(424, 0));
+            CreatePalikka(palikka1, new IntVector(100, 100), new IntVector(150, -50));
             Entity palikka = CreateNewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(300, 100));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,100), new IntVector(50, 200));
+            CreatePalikka(palikka, new IntVector(100,100), new IntVector(100, 200));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,50), new IntVector(400, 120));
+            CreatePalikka(palikka, new IntVector(100,50), new IntVector(400, 250));
 
             base.Initialize();
         }
@@ -103,10 +103,10 @@ namespace ReeGame
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetTransformationMatrix(GraphicsDevice.Viewport));
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetTransformationMatrix(GraphicsDevice.Viewport));
             RenderSystem.RenderSprites(sprites, positions, sizes, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MGPhysics.Components
 {
-    public struct Sprite : Component
+    public struct Sprite : IComponent
     {
         public Sprite(Texture2D texture, Color color)
         {

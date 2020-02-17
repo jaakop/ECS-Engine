@@ -1,9 +1,6 @@
-﻿using System;
+﻿using MGPhysics.Components;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MGPhysics.Components;
 namespace MGPhysics.Systems
 {
     public static class PhysicsSystem
@@ -17,56 +14,47 @@ namespace MGPhysics.Systems
         /// <param name="velocity">Velocity of the entity</param>
         public static void MoveEntity(int entityKey, IntVector velocity, ref Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
         {
-            IntVector amountMoved = velocity;
-            IntVector adjustedPosition = positions[entityKey] + amountMoved;
+            IntVector position = positions[entityKey];
+            IntVector hitbox = hitBoxes[entityKey];
+            IntVector adjustedPosition = positions[entityKey] + velocity;
+
             foreach (KeyValuePair<int, IntVector> entity in positions)
             {
-                //Check if the entity is the same as the entity that is being moved
                 if (entity.Key == entityKey)
                     continue;
-                
-                //Check if entity has an hitbox
+
                 if (!hitBoxes.ContainsKey(entity.Key))
                     continue;
 
-                //Check if entity collides with moved entity
-                if(entity.Value.X + hitBoxes[entity.Key].X / 2 > adjustedPosition.X - hitBoxes[entityKey].X / 2
-                    && entity.Value.X - hitBoxes[entity.Key].X / 2 < adjustedPosition.X + hitBoxes[entityKey].X / 2)
-                {
-                    if(entity.Value.Y + hitBoxes[entity.Key].Y / 2 > adjustedPosition.Y - hitBoxes[entityKey].Y / 2
-                    && entity.Value.Y - hitBoxes[entity.Key].Y / 2 < adjustedPosition.Y + hitBoxes[entityKey].Y / 2)
-                    {
-                        //Check if the collission hapens from the sides (left & right)
-                        if (Math.Abs(Math.Abs(positions[entityKey].X) - Math.Abs(entity.Value.X)) - hitBoxes[entity.Key].X/2
-                            >
-                            Math.Abs(Math.Abs(positions[entityKey].Y) - Math.Abs(entity.Value.Y)) - hitBoxes[entity.Key].Y / 2)
-                        {
-                            //Move the moved entity back on the X axis
-                            if(velocity.X > 0)
-                            {
-                                adjustedPosition.X = entity.Value.X - hitBoxes[entity.Key].X / 2 - hitBoxes[entityKey].X / 2;
-                            }
-                            else
-                            {
-                                adjustedPosition.X = entity.Value.X + hitBoxes[entity.Key].X / 2 + hitBoxes[entityKey].X / 2;
-                            }
-                        }
+                IntVector entityPosition = entity.Value;
+                IntVector entityHitBox = hitBoxes[entity.Key];
 
-                        //Check if the collission happens from top or bottom
-                        if (Math.Abs(Math.Abs(positions[entityKey].X) - Math.Abs(entity.Value.X)) - hitBoxes[entity.Key].X / 2
-                            <
-                            Math.Abs(Math.Abs(positions[entityKey].Y) - Math.Abs(entity.Value.Y)) - hitBoxes[entity.Key].Y / 2)
-                        {
-                            //Move the moved entity back on the Y axis
-                            if (velocity.Y > 0)
-                            {
-                                adjustedPosition.Y = entity.Value.Y - hitBoxes[entity.Key].Y / 2 - hitBoxes[entityKey].Y / 2;
-                            }
-                            else
-                            {
-                                adjustedPosition.Y = entity.Value.Y + hitBoxes[entity.Key].Y / 2 + hitBoxes[entityKey].Y / 2;
-                            }
-                        }
+                if (entityPosition.X + entityHitBox.X / 2 > adjustedPosition.X - hitbox.X / 2
+                    && entityPosition.X - entityHitBox.X / 2 < adjustedPosition.X + hitbox.X / 2
+                    && entityPosition.Y + entityHitBox.Y / 2 > adjustedPosition.Y - hitbox.Y / 2
+                    && entityPosition.Y - entityHitBox.Y / 2 < adjustedPosition.Y + hitbox.Y / 2)
+                {
+                    int distX = Math.Abs(Math.Abs(position.X) - Math.Abs(entityPosition.X)) - entityHitBox.X / 2;
+                    int distY = Math.Abs(Math.Abs(position.Y) - Math.Abs(entityPosition.Y)) - entityHitBox.Y / 2;
+
+                    Console.WriteLine("X_collider: " + positions[entityKey].X + " Y_collider: " + positions[entityKey].Y);
+                    Console.WriteLine("X_collided: " + entity.Value.X + " Y_collided: " + entity.Value.Y);
+                    Console.WriteLine("distance X: " + distX + " Distance Y: " + distY);
+
+                    if (distX >= distY)
+                    {
+                        if (velocity.X > 0)
+                            adjustedPosition.X = entityPosition.X - entityHitBox.X / 2 - hitbox.X / 2;
+                        else
+                            adjustedPosition.X = entityPosition.X + entityHitBox.X / 2 + hitbox.X / 2;
+                    }
+
+                    if (distX <= distY)
+                    {
+                        if (velocity.Y > 0)
+                            adjustedPosition.Y = entityPosition.Y - entityHitBox.Y / 2 - hitbox.Y / 2;
+                        else
+                            adjustedPosition.Y = entityPosition.Y + entityHitBox.Y / 2 + hitbox.Y / 2;
                     }
                 }
             }
