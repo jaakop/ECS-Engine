@@ -12,11 +12,14 @@ namespace MGPhysics.Systems
         /// <param name="positions">Dictionary on entity positions</param>
         /// <param name="hitBoxes">Dictionary on entity hit boxes</param>
         /// <param name="velocity">Velocity of the entity</param>
-        public static void MoveEntity(int entityKey, IntVector velocity, ref Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
+        /// <returns>A list of the entities, that were collided with</returns>
+        public static List<int> MoveEntity(int entityKey, IntVector velocity, ref Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
         {
             IntVector position = positions[entityKey];
             IntVector hitbox = hitBoxes[entityKey];
             IntVector adjustedPosition = positions[entityKey] + velocity;
+
+            List<int> collidedWith = new List<int>();
 
             foreach (KeyValuePair<int, IntVector> entity in positions)
             {
@@ -34,6 +37,8 @@ namespace MGPhysics.Systems
                     && entityPosition.Y + entityHitBox.Y / 2 > adjustedPosition.Y - hitbox.Y / 2
                     && entityPosition.Y - entityHitBox.Y / 2 < adjustedPosition.Y + hitbox.Y / 2)
                 {
+                    collidedWith.Add(entity.Key);
+
                     int distX = Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2;
                     int distY = Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2;
 
@@ -55,6 +60,7 @@ namespace MGPhysics.Systems
                 }
             }
             positions[entityKey] = adjustedPosition;
+            return collidedWith;
         }
     }
 }

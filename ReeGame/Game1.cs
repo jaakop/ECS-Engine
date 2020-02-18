@@ -36,7 +36,7 @@ namespace ReeGame
         protected override void Initialize()
         {
             key = 0;
-            movementSpeed = 5;
+            movementSpeed = 7;
 
             camera = new Camera2D(new IntVector(0, 0), 0.5f);
 
@@ -51,7 +51,7 @@ namespace ReeGame
             palikka = CreateNewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(50, 450));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,50), new IntVector(25, 25));
+            CreatePalikka(palikka, new IntVector(100,50), new IntVector(-100, -100));
 
             base.Initialize();
         }
