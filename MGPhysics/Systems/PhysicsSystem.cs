@@ -34,12 +34,8 @@ namespace MGPhysics.Systems
                     && entityPosition.Y + entityHitBox.Y / 2 > adjustedPosition.Y - hitbox.Y / 2
                     && entityPosition.Y - entityHitBox.Y / 2 < adjustedPosition.Y + hitbox.Y / 2)
                 {
-                    int distX = Math.Abs(Math.Abs(position.X) - Math.Abs(entityPosition.X)) - entityHitBox.X / 2;
-                    int distY = Math.Abs(Math.Abs(position.Y) - Math.Abs(entityPosition.Y)) - entityHitBox.Y / 2;
-
-                    Console.WriteLine("X_collider: " + positions[entityKey].X + " Y_collider: " + positions[entityKey].Y);
-                    Console.WriteLine("X_collided: " + entity.Value.X + " Y_collided: " + entity.Value.Y);
-                    Console.WriteLine("distance X: " + distX + " Distance Y: " + distY);
+                    int distX = Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2;
+                    int distY = Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2;
 
                     if (distX >= distY)
                     {

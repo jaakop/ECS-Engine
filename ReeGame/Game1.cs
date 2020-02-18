@@ -49,9 +49,9 @@ namespace ReeGame
             Entity palikka = CreateNewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(300, 100));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,100), new IntVector(100, 200));
+            CreatePalikka(palikka, new IntVector(100,100), new IntVector(50, 450));
             palikka = CreateNewEntity();
-            CreatePalikka(palikka, new IntVector(100,50), new IntVector(400, 250));
+            CreatePalikka(palikka, new IntVector(100,50), new IntVector(25, 25));
 
             base.Initialize();
         }
