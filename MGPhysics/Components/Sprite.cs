@@ -10,12 +10,18 @@ namespace MGPhysics.Components
 {
     public struct Sprite : IComponent
     {
+        /// <summary>
+        /// New sprite object
+        /// </summary>
+        /// <param name="texture">Texture of the sprite</param>
+        /// <param name="color">Color mask of the sprite</param>
         public Sprite(Texture2D texture, Color color)
         {
             Texture = texture;
             ColorMask = color;
         }
-        public Texture2D Texture{ get; set; }
-        public Color ColorMask { get; set; }
+
+        public Texture2D Texture{ get; }
+        public Color ColorMask { get; }
     }
 }
