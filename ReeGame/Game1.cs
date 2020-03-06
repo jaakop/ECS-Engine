@@ -14,7 +14,6 @@ namespace ReeGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        int key;
 
         Entity palikka1;
 
@@ -35,7 +34,6 @@ namespace ReeGame
 
         protected override void Initialize()
         {
-            key = 0;
             movementSpeed = 7;
 
             camera = new Camera2D(new IntVector(0, 0), 0.5f);
@@ -44,13 +42,13 @@ namespace ReeGame
             positions = new Dictionary<int, IntVector>();
             sizes = new Dictionary<int, IntVector>();
             // TODO: Add your initialization logic here
-            palikka1 = CreateNewEntity();
+            palikka1 = Entity.NewEntity();
             CreatePalikka(palikka1, new IntVector(100, 100), new IntVector(150, -50));
-            Entity palikka = CreateNewEntity();
+            Entity palikka = Entity.NewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(300, 100));
-            palikka = CreateNewEntity();
+            palikka = Entity.NewEntity();
             CreatePalikka(palikka, new IntVector(100,100), new IntVector(50, 450));
-            palikka = CreateNewEntity();
+            palikka = Entity.NewEntity();
             CreatePalikka(palikka, new IntVector(100,50), new IntVector(-100, -100));
 
             base.Initialize();
@@ -110,13 +108,6 @@ namespace ReeGame
             RenderSystem.RenderSprites(sprites, positions, sizes, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
-        }
-
-        Entity CreateNewEntity()
-        {
-            Entity entity = new Entity(key);
-            key++;
-            return entity;
         }
 
         void CreatePalikka(Entity palikka, IntVector size, IntVector posisition)
