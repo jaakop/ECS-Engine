@@ -88,12 +88,32 @@ namespace ReeGame
                     CreatePalikka(targetPalikka, new IntVector(25, 25), new IntVector((int)mousePosition.X, (int)mousePosition.Y));
                     mousePressed = true;
                 }
-
             }
             else if(mouseState.LeftButton == ButtonState.Released)
             {
                 mousePressed = false;   
             }
+
+            IntVector velocity = new IntVector(0,0);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                velocity += new IntVector(0, -1 * movementSpeed);
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                velocity += new IntVector(0, 1 * movementSpeed);
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                velocity += new IntVector(-1 * movementSpeed,0);
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                velocity += new IntVector(1 * movementSpeed, 0);
+            }
+
+            PhysicsSystem.MoveEntity(palikka1.Key, velocity, ref positions, sizes);
 
             base.Update(gameTime);
         }
