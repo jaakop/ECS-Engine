@@ -5,6 +5,7 @@ namespace ReeGame
 #if WINDOWS || LINUX
     /// <summary>
     /// The main class.
+    /// Please do not touch c:
     /// </summary>
     public static class Program
     {
