@@ -18,19 +18,19 @@ namespace MGPhysics.Systems
         /// <param name="positions">Dictionary of positions to draw the sprites to</param>
         /// <param name="sizes">Dictionary of sizes for the sprites</param>
         /// <param name="spriteBatch">Spritebatch to draw with</param>
-        public static void RenderSprites(Dictionary<int, Sprite> sprites, Dictionary<int, IntVector> positions, Dictionary<int, IntVector> sizes, SpriteBatch spriteBatch)
+        public static void RenderSprites(Dictionary<int, Sprite> sprites, Dictionary<int, Vector> positions, Dictionary<int, Vector> sizes, SpriteBatch spriteBatch)
         {
             foreach(KeyValuePair<int, Sprite> sprite in sprites)
             {
-                IntVector position = new IntVector(0, 0);
-                IntVector size = new IntVector(sprite.Value.Texture.Width, sprite.Value.Texture.Height);
+                Vector position = new Vector(0, 0);
+                Vector size = new Vector(sprite.Value.Texture.Width, sprite.Value.Texture.Height);
 
                 if (positions.ContainsKey(sprite.Key))
                     position = positions[sprite.Key];
                 if (sizes.ContainsKey(sprite.Key))
                     size = sizes[sprite.Key];
 
-                spriteBatch.Draw(sprite.Value.Texture, new Rectangle(position.X - size.X/2, position.Y - size.Y/2, size.X, size.Y), sprite.Value.ColorMask);
+                spriteBatch.Draw(sprite.Value.Texture, new Rectangle(position.IntegerX - size.IntegerX/2, position.IntegerY - size.IntegerY / 2, size.IntegerX, size.IntegerY), sprite.Value.ColorMask);
             }
         }
     }

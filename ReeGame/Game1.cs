@@ -16,8 +16,8 @@ namespace ReeGame
         Entity palikka1;
 
         Dictionary<int, Sprite> sprites;
-        Dictionary<int, IntVector> positions;
-        Dictionary<int, IntVector> sizes;
+        Dictionary<int, Vector> positions;
+        Dictionary<int, Vector> sizes;
 
         int movementSpeed;
         bool mousePressed;
@@ -38,21 +38,21 @@ namespace ReeGame
             movementSpeed = 7;
             mousePressed = false;
 
-            camera = new Camera2D(new IntVector(0, 0), 0.5f);
+            camera = new Camera2D(new Vector(0, 0), 0.5f);
 
             sprites = new Dictionary<int, Sprite>();
-            positions = new Dictionary<int, IntVector>();
-            sizes = new Dictionary<int, IntVector>();
+            positions = new Dictionary<int, Vector>();
+            sizes = new Dictionary<int, Vector>();
             targetPalikka = Entity.NewEntity();
             // TODO: Add your initialization logic here
             palikka1 = Entity.NewEntity();
-            CreatePalikka(palikka1, new IntVector(100, 100), new IntVector(150, -50));
+            CreatePalikka(palikka1, new Vector(100, 100), new Vector(150, -50));
             Entity palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new IntVector(100, 100), new IntVector(300, 100));
+            CreatePalikka(palikka, new Vector(100, 100), new Vector(300, 100));
             palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new IntVector(100, 100), new IntVector(50, 450));
+            CreatePalikka(palikka, new Vector(100, 100), new Vector(50, 450));
             palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new IntVector(100, 50), new IntVector(-100, -100));
+            CreatePalikka(palikka, new Vector(100, 50), new Vector(-100, -100));
 
             base.Initialize();
         }
@@ -85,7 +85,7 @@ namespace ReeGame
                 {
                     Vector2 mousePosition = new Vector2(camera.Position.X + mouseState.Position.X / camera.Zoom - GraphicsDevice.Viewport.Width,
                                                         camera.Position.Y + mouseState.Position.Y / camera.Zoom - GraphicsDevice.Viewport.Height);
-                    CreatePalikka(targetPalikka, new IntVector(25, 25), new IntVector((int)mousePosition.X, (int)mousePosition.Y));
+                    CreatePalikka(targetPalikka, new Vector(25, 25), new Vector((int)mousePosition.X, (int)mousePosition.Y));
                     mousePressed = true;
                 }
             }
@@ -94,23 +94,23 @@ namespace ReeGame
                 mousePressed = false;   
             }
 
-            IntVector velocity = new IntVector(0,0);
+            Vector velocity = new Vector(0,0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                velocity += new IntVector(0, -1 * movementSpeed);
+                velocity += new Vector(0, -1 * movementSpeed);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                velocity += new IntVector(0, 1 * movementSpeed);
+                velocity += new Vector(0, 1 * movementSpeed);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                velocity += new IntVector(-1 * movementSpeed,0);
+                velocity += new Vector(-1 * movementSpeed,0);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                velocity += new IntVector(1 * movementSpeed, 0);
+                velocity += new Vector(1 * movementSpeed, 0);
             }
 
             PhysicsSystem.MoveEntity(palikka1.Key, velocity, ref positions, sizes);
@@ -129,7 +129,7 @@ namespace ReeGame
             base.Draw(gameTime);
         }
 
-        void CreatePalikka(Entity palikka, IntVector size, IntVector position)
+        void CreatePalikka(Entity palikka, Vector size, Vector position)
         {
             Texture2D basicTexture = new Texture2D(GraphicsDevice, 1, 1);
             basicTexture.SetData(new Color[] { Color.White });

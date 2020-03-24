@@ -6,7 +6,7 @@ namespace MGPhysics
 {
     public class Camera2D
     {
-        IntVector position;
+        Vector position;
         float zoom;
 
         /// <summary>
@@ -14,7 +14,7 @@ namespace MGPhysics
         /// </summary>
         /// <param name="Position">Position of the camera</param>
         /// <param name="Zoom">Camera zoom amount</param>
-        public Camera2D(IntVector Position, float Zoom)
+        public Camera2D(Vector Position, float Zoom)
         {
             this.position = Position;
             this.zoom = Zoom;
@@ -32,7 +32,7 @@ namespace MGPhysics
                                             Matrix.CreateTranslation(new Vector3(viewport.Width * 0.5f, viewport.Height * 0.5f, 0));
         }
 
-        public IntVector Position { get => position; set => position = value; }
+        public Vector Position { get => position; set => position = value; }
         public float Zoom { get => zoom; set => zoom = value; }
     }
 }

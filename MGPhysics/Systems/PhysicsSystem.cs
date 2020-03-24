@@ -13,15 +13,15 @@ namespace MGPhysics.Systems
         /// <param name="hitBoxes">Dictionary on entity hit boxes</param>
         /// <param name="velocity">Velocity of the entity</param>
         /// <returns>A list of the entities, that were collided with</returns>
-        public static List<int> MoveEntity(int entityKey, IntVector velocity, ref Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
+        public static List<int> MoveEntity(int entityKey, Vector velocity, ref Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
         {
-            IntVector position = positions[entityKey];
-            IntVector hitbox = hitBoxes[entityKey];
-            IntVector adjustedPosition = positions[entityKey] + velocity;
+            Vector position = positions[entityKey];
+            Vector hitbox = hitBoxes[entityKey];
+            Vector adjustedPosition = positions[entityKey] + velocity;
 
             List<int> collidedEntities = new List<int>();
 
-            foreach (KeyValuePair<int, IntVector> entity in positions)
+            foreach (KeyValuePair<int, Vector> entity in positions)
             {
                 if (entity.Key == entityKey)
                     continue;
@@ -29,15 +29,15 @@ namespace MGPhysics.Systems
                 if (!hitBoxes.ContainsKey(entity.Key))
                     continue;
 
-                IntVector entityPosition = entity.Value;
-                IntVector entityHitBox = hitBoxes[entity.Key];
+                Vector entityPosition = entity.Value;
+                Vector entityHitBox = hitBoxes[entity.Key];
 
                 if (CheckCollissions(adjustedPosition, hitbox, entityPosition, entityHitBox))
                 {
                     collidedEntities.Add(entity.Key);
 
-                    int distX = Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2;
-                    int distY = Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2;
+                    int distX = (int)Math.Round(Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2);
+                    int distY = (int)Math.Round(Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2);
 
                     if (distX >= distY)
                     {
@@ -67,14 +67,14 @@ namespace MGPhysics.Systems
         /// <param name="positions">Dictionary of positions</param>
         /// <param name="hitBoxes">Dictionary of hitboxes</param>
         /// <returns>List of the collided entities</returns>
-        public static List<int> CheckCollissions(int entityKey, Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
+        public static List<int> CheckCollissions(int entityKey, Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
         {
             List<int> collidedEntities = new List<int>();
 
-            IntVector position = positions[entityKey];
-            IntVector hitbox = hitBoxes[entityKey];
+            Vector position = positions[entityKey];
+            Vector hitbox = hitBoxes[entityKey];
 
-            foreach (KeyValuePair<int, IntVector> entity in positions)
+            foreach (KeyValuePair<int, Vector> entity in positions)
             {
                 if (entity.Key == entityKey)
                     continue;
@@ -82,8 +82,8 @@ namespace MGPhysics.Systems
                 if (!hitBoxes.ContainsKey(entity.Key))
                     continue;
 
-                IntVector entityPosition = entity.Value;
-                IntVector entityHitBox = hitBoxes[entity.Key];
+                Vector entityPosition = entity.Value;
+                Vector entityHitBox = hitBoxes[entity.Key];
 
                 if (entityPosition.X + entityHitBox.X / 2 > position.X - hitbox.X / 2
                     && entityPosition.X - entityHitBox.X / 2 < position.X + hitbox.X / 2
@@ -105,13 +105,13 @@ namespace MGPhysics.Systems
         /// <param name="positions">Dictionary of positions</param>
         /// <param name="hitBoxes">Dictionary of hitboxes</param>
         /// <returns></returns>
-        public static bool CheckCollissions(int colliderKey, int targetKey, Dictionary<int, IntVector> positions, Dictionary<int, IntVector> hitBoxes)
+        public static bool CheckCollissions(int colliderKey, int targetKey, Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
         {
-            IntVector colliderPosition = positions[colliderKey];
-            IntVector targetPosition = positions[targetKey];
+            Vector colliderPosition = positions[colliderKey];
+            Vector targetPosition = positions[targetKey];
 
-            IntVector colliderHitBox = hitBoxes[colliderKey];
-            IntVector targetHitBox = hitBoxes[targetKey];
+            Vector colliderHitBox = hitBoxes[colliderKey];
+            Vector targetHitBox = hitBoxes[targetKey];
 
             if (targetPosition.X + targetHitBox.X / 2 > colliderPosition.X - colliderHitBox.X / 2
                 && targetPosition.X - targetHitBox.X / 2 < colliderPosition.X + colliderHitBox.X / 2
@@ -130,7 +130,7 @@ namespace MGPhysics.Systems
         /// <param name="targetPosition">Position of the target</param>
         /// <param name="targetHitBox">HitBox of the target</param>
         /// <returns></returns>
-        public static bool CheckCollissions(IntVector colliderPosition, IntVector colliderHitBox, IntVector targetPosition, IntVector targetHitBox)
+        public static bool CheckCollissions(Vector colliderPosition, Vector colliderHitBox, Vector targetPosition, Vector targetHitBox)
         {
             if (targetPosition.X + targetHitBox.X / 2 > colliderPosition.X - colliderHitBox.X / 2
                 && targetPosition.X - targetHitBox.X / 2 < colliderPosition.X + colliderHitBox.X / 2

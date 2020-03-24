@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MGPhysics.Components
 {
-    public struct IntVector : IComponent
+    public struct Vector : IComponent
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
 
-        public IntVector(int x, int y)
+        public Vector(float x, float y)
         {
             X = x;
             Y = y;
@@ -24,37 +24,37 @@ namespace MGPhysics.Components
         /// <param name="a">Base vector</param>
         /// <param name="b">Vector to add</param>
         /// <returns></returns>
-        public static IntVector operator +(IntVector a, IntVector b)
+        public static Vector operator +(Vector a, Vector b)
         {
-            return new IntVector(a.X+b.X, a.Y+b.Y);
+            return new Vector(a.X+b.X, a.Y+b.Y);
         }
         /// <summary>
-        /// Adds an int to Vector
+        /// Adds an float to Vector
         /// </summary>
         /// <param name="a">Base Vector</param>
-        /// <param name="b">Interger to add to the vector</param>
+        /// <param name="b">floaterger to add to the vector</param>
         /// <returns></returns>
-        public static IntVector operator +(IntVector a, int b)
+        public static Vector operator +(Vector a, float b)
         {
-            return new IntVector(a.X + b, a.Y + b);
+            return new Vector(a.X + b, a.Y + b);
         }
         /// <summary>
         /// Increase vector by one
         /// </summary>
         /// <param name="a">Base Vector</param>
         /// <returns></returns>
-        public static IntVector operator ++(IntVector a)
+        public static Vector operator ++(Vector a)
         {
-            return new IntVector(a.X + 1, a.Y + 1);
+            return new Vector(a.X + 1, a.Y + 1);
         }
         /// <summary>
         /// Flips the vector
         /// </summary>
         /// <param name="vector">Base Vector</param>
         /// <returns></returns>
-        public static IntVector operator -(IntVector vector)
+        public static Vector operator -(Vector vector)
         {
-            return new IntVector(-vector.X, -vector.Y);
+            return new Vector(-vector.X, -vector.Y);
         }
         /// <summary>
         /// Subtracts two vectors
@@ -62,46 +62,68 @@ namespace MGPhysics.Components
         /// <param name="a">Base Vector</param>
         /// <param name="b">Vector to substract</param>
         /// <returns></returns>
-        public static IntVector operator -(IntVector a, IntVector b)
+        public static Vector operator -(Vector a, Vector b)
         {
-            return new IntVector(a.X - b.X, a.Y-b.Y);
+            return new Vector(a.X - b.X, a.Y-b.Y);
         }
         /// <summary>
-        /// Subtracts a int from a vector
+        /// Subtracts a float from a vector
         /// </summary>
         /// <param name="a">Base Vector</param>
-        /// <param name="b">Int to substract from the vector</param>
+        /// <param name="b">float to substract from the vector</param>
         /// <returns></returns>
-        public static IntVector operator -(IntVector a, int b)
+        public static Vector operator -(Vector a, float b)
         {
-            return new IntVector(a.X - b, a.Y - b);
+            return new Vector(a.X - b, a.Y - b);
         }
         /// <summary>
         /// Decrease vector by one
         /// </summary>
         /// <param name="a">Base Vector</param>
         /// <returns></returns>
-        public static IntVector operator --(IntVector a)
+        public static Vector operator --(Vector a)
         {
-            return new IntVector(a.X - 1, a.Y - 1);
+            return new Vector(a.X - 1, a.Y - 1);
         }
         /// <summary>
         /// Divide Vector
         /// </summary>
         /// <param name="a">Base Vector</param>
         /// <returns></returns>
-        public static IntVector operator /(IntVector a, int b)
+        public static Vector operator /(Vector a, float b)
         {
-            return new IntVector(a.X / b, a.Y / b);
+            return new Vector(a.X / b, a.Y / b);
         }
         /// <summary>
         /// Multiply Vector
         /// </summary>
         /// <param name="a">Base Vector</param>
         /// <returns></returns>
-        public static IntVector operator *(IntVector a, int b)
+        public static Vector operator *(Vector a, float b)
         {
-            return new IntVector(a.X * b, a.Y * b);
+            return new Vector(a.X * b, a.Y * b);
+        }
+
+        /// <summary>
+        /// Return the X value as rounded integer
+        /// </summary>
+        public int IntegerX
+        {
+            get
+            {
+                return (int)Math.Round(X);
+            }
+        }
+
+        /// <summary>
+        /// Return the Y value as rounded integer
+        /// </summary>
+        public int IntegerY
+        {
+            get
+            {
+            return (int)Math.Round(Y);
+            }
         }
     }
 }
