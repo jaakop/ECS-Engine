@@ -138,5 +138,11 @@ namespace MGPhysics.Components
         {
             return start + (end - start) * t;
         }
+
+        public Vector Normalize()
+        {
+            float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            return new Vector(X / lenght, Y / lenght);
+        }
     }
 }
