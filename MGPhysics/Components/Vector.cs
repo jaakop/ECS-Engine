@@ -134,11 +134,22 @@ namespace MGPhysics.Components
             }
         }
 
+        /// <summary>
+        /// Interpolates two vector by t
+        /// </summary>
+        /// <param name="start">Starting point</param>
+        /// <param name="end">ENd point</param>
+        /// <param name="t">The interpolant</param>
+        /// <returns></returns>
         public static Vector Lerp(Vector start, Vector end, float t)
         {
             return start + (end - start) * t;
         }
 
+        /// <summary>
+        /// Make a unit vector
+        /// </summary>
+        /// <returns>A unit vector</returns>
         public Vector Normalize()
         {
             float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
