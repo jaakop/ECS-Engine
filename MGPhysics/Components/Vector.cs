@@ -138,7 +138,7 @@ namespace MGPhysics.Components
         /// Interpolates two vector by t
         /// </summary>
         /// <param name="start">Starting point</param>
-        /// <param name="end">ENd point</param>
+        /// <param name="end">End point</param>
         /// <param name="t">The interpolant</param>
         /// <returns></returns>
         public static Vector Lerp(Vector start, Vector end, float t)
