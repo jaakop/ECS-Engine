@@ -28,6 +28,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X+b.X, a.Y+b.Y);
         }
+
         /// <summary>
         /// Adds an float to Vector
         /// </summary>
@@ -38,6 +39,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X + b, a.Y + b);
         }
+
         /// <summary>
         /// Increase vector by one
         /// </summary>
@@ -47,6 +49,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X + 1, a.Y + 1);
         }
+
         /// <summary>
         /// Flips the vector
         /// </summary>
@@ -56,6 +59,7 @@ namespace MGPhysics.Components
         {
             return new Vector(-vector.X, -vector.Y);
         }
+
         /// <summary>
         /// Subtracts two vectors
         /// </summary>
@@ -66,6 +70,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X - b.X, a.Y-b.Y);
         }
+
         /// <summary>
         /// Subtracts a float from a vector
         /// </summary>
@@ -76,6 +81,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X - b, a.Y - b);
         }
+
         /// <summary>
         /// Decrease vector by one
         /// </summary>
@@ -85,6 +91,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X - 1, a.Y - 1);
         }
+
         /// <summary>
         /// Divide Vector
         /// </summary>
@@ -94,6 +101,7 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X / b, a.Y / b);
         }
+
         /// <summary>
         /// Multiply Vector
         /// </summary>
@@ -124,6 +132,28 @@ namespace MGPhysics.Components
             {
             return (int)Math.Round(Y);
             }
+        }
+
+        /// <summary>
+        /// Interpolates two vector by t
+        /// </summary>
+        /// <param name="start">Starting point</param>
+        /// <param name="end">End point</param>
+        /// <param name="t">The interpolant</param>
+        /// <returns></returns>
+        public static Vector Lerp(Vector start, Vector end, float t)
+        {
+            return start + (end - start) * t;
+        }
+
+        /// <summary>
+        /// Make a unit vector
+        /// </summary>
+        /// <returns>A unit vector</returns>
+        public Vector Normalize()
+        {
+            float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            return new Vector(X / lenght, Y / lenght);
         }
     }
 }
