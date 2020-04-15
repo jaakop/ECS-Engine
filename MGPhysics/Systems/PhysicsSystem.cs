@@ -13,28 +13,28 @@ namespace MGPhysics.Systems
         /// <param name="hitBoxes">Dictionary on entity hit boxes</param>
         /// <param name="velocity">Velocity of the entity</param>
         /// <returns>A list of the entities, that were collided with</returns>
-        public static List<int> MoveEntity(int entityKey, Vector velocity, ref Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
+        public static List<Entity> MoveEntity(Entity entity, Vector velocity, ref Dictionary<Entity, Transform> transforms, Dictionary<Entity, RigidBody> rigidBodies)
         {
-            Vector position = positions[entityKey];
-            Vector hitbox = hitBoxes[entityKey];
-            Vector adjustedPosition = positions[entityKey] + velocity;
+            Vector position = transforms[entity].Position;
+            Vector hitbox = rigidBodies[entity].HitBox;
+            Vector adjustedPosition = transforms[entity].Position + velocity;
 
-            List<int> collidedEntities = new List<int>();
+            List<Entity> collidedEntities = new List<Entity>();
 
-            foreach (KeyValuePair<int, Vector> entity in positions)
+            foreach (KeyValuePair<Entity, Transform> targetObject in transforms)
             {
-                if (entity.Key == entityKey)
+                if (entity == targetObject.Key)
                     continue;
 
-                if (!hitBoxes.ContainsKey(entity.Key))
+                if (!rigidBodies.ContainsKey(targetObject.Key))
                     continue;
 
-                Vector entityPosition = entity.Value;
-                Vector entityHitBox = hitBoxes[entity.Key];
+                Vector entityPosition = targetObject.Value.Position;
+                Vector entityHitBox = rigidBodies[targetObject.Key].HitBox;
 
                 if (CheckCollissions(adjustedPosition, hitbox, entityPosition, entityHitBox))
                 {
-                    collidedEntities.Add(entity.Key);
+                    collidedEntities.Add(targetObject.Key);
 
                     int distX = (int)Math.Round(Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2);
                     int distY = (int)Math.Round(Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2);
@@ -56,41 +56,41 @@ namespace MGPhysics.Systems
                     }
                 }
             }
-            positions[entityKey] = adjustedPosition;
+            transforms[entity] = new Transform(adjustedPosition, transforms[entity].Size);
             return collidedEntities;
         }
 
         /// <summary>
         /// Checks for all collissions for an object
         /// </summary>
-        /// <param name="entityKey">Entity key of the collider</param>
-        /// <param name="positions">Dictionary of positions</param>
-        /// <param name="hitBoxes">Dictionary of hitboxes</param>
-        /// <returns>List of the collided entities</returns>
-        public static List<int> CheckCollissions(int entityKey, Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
+        /// <param name="entity">Entity that is colliding</param>
+        /// <param name="transforms">Dictionary of transforms</param>
+        /// <param name="rigidBodies">Dictionary of rigidBodies</param>
+        /// <returns></returns>
+        public static List<Entity> CheckCollissions(Entity entity, Dictionary<Entity, Transform> transforms, Dictionary<Entity, RigidBody> rigidBodies)
         {
-            List<int> collidedEntities = new List<int>();
+            List<Entity> collidedEntities = new List<Entity>();
 
-            Vector position = positions[entityKey];
-            Vector hitbox = hitBoxes[entityKey];
+            Vector position = transforms[entity].Position;
+            Vector hitbox = rigidBodies[entity].HitBox;
 
-            foreach (KeyValuePair<int, Vector> entity in positions)
+            foreach (KeyValuePair<Entity, Transform> targetObject in transforms)
             {
-                if (entity.Key == entityKey)
+                if (targetObject.Key == entity)
                     continue;
 
-                if (!hitBoxes.ContainsKey(entity.Key))
+                if (!rigidBodies.ContainsKey(targetObject.Key))
                     continue;
 
-                Vector entityPosition = entity.Value;
-                Vector entityHitBox = hitBoxes[entity.Key];
+                Vector entityPosition = targetObject.Value.Position;
+                Vector entityHitBox = rigidBodies[targetObject.Key].HitBox;
 
                 if (entityPosition.X + entityHitBox.X / 2 > position.X - hitbox.X / 2
                     && entityPosition.X - entityHitBox.X / 2 < position.X + hitbox.X / 2
                     && entityPosition.Y + entityHitBox.Y / 2 > position.Y - hitbox.Y / 2
                     && entityPosition.Y - entityHitBox.Y / 2 < position.Y + hitbox.Y / 2)
                 {
-                    collidedEntities.Add(entity.Key);
+                    collidedEntities.Add(targetObject.Key);
                 }
             }
 
@@ -100,18 +100,18 @@ namespace MGPhysics.Systems
         /// <summary>
         /// Check for collission between two objects
         /// </summary>
-        /// <param name="colliderKey">Kay of the collider</param>
-        /// <param name="targetKey">Key of the collission target</param>
-        /// <param name="positions">Dictionary of positions</param>
-        /// <param name="hitBoxes">Dictionary of hitboxes</param>
+        /// <param name="collider">Collider Entity</param>
+        /// <param name="target">Target Entity</param>
+        /// <param name="transforms">Dictionary of transforms</param>
+        /// <param name="rigidBodies">Dictionary of rigidBodies</param>
         /// <returns></returns>
-        public static bool CheckCollissions(int colliderKey, int targetKey, Dictionary<int, Vector> positions, Dictionary<int, Vector> hitBoxes)
+        public static bool CheckCollissions(Entity collider, Entity target, Dictionary<Entity, Transform> transforms, Dictionary<Entity, RigidBody> rigidBodies)
         {
-            Vector colliderPosition = positions[colliderKey];
-            Vector targetPosition = positions[targetKey];
+            Vector colliderPosition = transforms[collider].Position;
+            Vector targetPosition = transforms[target].Position;
 
-            Vector colliderHitBox = hitBoxes[colliderKey];
-            Vector targetHitBox = hitBoxes[targetKey];
+            Vector colliderHitBox = rigidBodies[collider].HitBox;
+            Vector targetHitBox = rigidBodies[target].HitBox;
 
             if (targetPosition.X + targetHitBox.X / 2 > colliderPosition.X - colliderHitBox.X / 2
                 && targetPosition.X - targetHitBox.X / 2 < colliderPosition.X + colliderHitBox.X / 2
@@ -125,17 +125,36 @@ namespace MGPhysics.Systems
         /// <summary>
         /// Check for collission between two objects
         /// </summary>
-        /// <param name="colliderPosition">Position of collider</param>
-        /// <param name="colliderHitBox">HitBox of the collider</param>
-        /// <param name="targetPosition">Position of the target</param>
-        /// <param name="targetHitBox">HitBox of the target</param>
+        /// <param name="colliderTransform">Transfrom of collider</param>
+        /// <param name="colliderRidigBody">RigidBody of the collider</param>
+        /// <param name="targetTransform">Transfrom of the target</param>
+        /// <param name="targetRidigBody">RigidBody of the target</param>
         /// <returns></returns>
-        public static bool CheckCollissions(Vector colliderPosition, Vector colliderHitBox, Vector targetPosition, Vector targetHitBox)
+        public static bool CheckCollissions(Transform colliderTransform, RigidBody colliderRidigBody, Transform targetTransform, RigidBody targetRidigBody)
         {
-            if (targetPosition.X + targetHitBox.X / 2 > colliderPosition.X - colliderHitBox.X / 2
-                && targetPosition.X - targetHitBox.X / 2 < colliderPosition.X + colliderHitBox.X / 2
-                && targetPosition.Y + targetHitBox.Y / 2 > colliderPosition.Y - colliderHitBox.Y / 2
-                && targetPosition.Y - targetHitBox.Y / 2 < colliderPosition.Y + colliderHitBox.Y / 2)
+            if (targetTransform.Position.X + targetRidigBody.HitBox.X / 2 > colliderTransform.Position.X - colliderRidigBody.HitBox.X / 2
+                && targetTransform.Position.X - targetRidigBody.HitBox.X / 2 < colliderTransform.Position.X + colliderRidigBody.HitBox.X / 2
+                && targetTransform.Position.Y + targetRidigBody.HitBox.Y / 2 > colliderTransform.Position.Y - colliderRidigBody.HitBox.Y / 2
+                && targetTransform.Position.Y - targetRidigBody.HitBox.Y / 2 < colliderTransform.Position.Y + colliderRidigBody.HitBox.Y / 2)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Check for collission between two objects
+        /// </summary>
+        /// <param name="colliderPosition">collider position as a vector</param>
+        /// <param name="colliderHitbox">collider hitbox as a vector</param>
+        /// <param name="targetPosition">target position as a vector</param>
+        /// <param name="targetHitBox">target hitbox as a vector</param>
+        /// <returns></returns>
+        public static bool CheckCollissions(Vector colliderPosition, Vector colliderHitbox, Vector targetPosition, Vector targetHitBox)
+        {
+            if (targetPosition.X + targetHitBox.X / 2 > colliderPosition.X - colliderHitbox.X / 2
+                && targetPosition.X - targetHitBox.X / 2 < colliderPosition.X + colliderHitbox.X / 2
+                && targetPosition.Y + targetHitBox.Y / 2 > colliderPosition.Y - colliderHitbox.Y / 2
+                && targetPosition.Y - targetHitBox.Y / 2 < colliderPosition.Y + colliderHitbox.Y / 2)
                 return true;
 
             return false;

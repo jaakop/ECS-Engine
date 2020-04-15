@@ -114,7 +114,7 @@ namespace ReeGame
                 velocity += new Vector(1 * movementSpeed, 0);
             }
 
-            PhysicsSystem.MoveEntity(palikka1.Key, velocity, ref positions, sizes);
+            PhysicsSystem.MoveEntity(palikka1, velocity, ref transfroms, rigidBodies);
 
             base.Update(gameTime);
         }
