@@ -15,9 +15,9 @@ namespace ReeGame
 
         Entity palikka1;
 
-        Dictionary<int, Sprite> sprites;
-        Dictionary<int, Vector> positions;
-        Dictionary<int, Vector> sizes;
+        Dictionary<Entity, Transform> transfroms;
+        Dictionary<Entity, RigidBody> rigidBodies;
+        Dictionary<Entity, Sprite> sprites;
 
         int movementSpeed;
         bool mousePressed;
@@ -40,9 +40,10 @@ namespace ReeGame
 
             camera = new Camera2D(new Vector(0, 0), 0.5f);
 
-            sprites = new Dictionary<int, Sprite>();
-            positions = new Dictionary<int, Vector>();
-            sizes = new Dictionary<int, Vector>();
+            transfroms = new Dictionary<Entity, Transform>();
+            rigidBodies = new Dictionary<Entity, RigidBody>();
+            sprites = new Dictionary<Entity, Sprite>();
+
             targetPalikka = Entity.NewEntity();
             // TODO: Add your initialization logic here
             palikka1 = Entity.NewEntity();
@@ -124,7 +125,7 @@ namespace ReeGame
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetTransformationMatrix(GraphicsDevice.Viewport));
-            RenderSystem.RenderSprites(sprites, positions, sizes, spriteBatch);
+            RenderSystem.RenderSprites(sprites, transfroms, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -133,31 +134,35 @@ namespace ReeGame
         {
             Texture2D basicTexture = new Texture2D(GraphicsDevice, 1, 1);
             basicTexture.SetData(new Color[] { Color.White });
-            if (!sprites.ContainsKey(palikka.Key))
+
+            //Add sprite
+            if (!sprites.ContainsKey(palikka))
             {
-                sprites.Add(palikka.Key, new Sprite(basicTexture, Color.White));
+                sprites.Add(palikka, new Sprite(basicTexture, Color.White));
             }
             else
             {
-                sprites[palikka.Key] = new Sprite(basicTexture, Color.White);
+                sprites[palikka] = new Sprite(basicTexture, Color.White);
             }
 
-            if (!positions.ContainsKey(palikka.Key))
+            //Add transform
+            if (!transfroms.ContainsKey(palikka))
             {
-                positions.Add(palikka.Key, position);
+                transfroms.Add(palikka, new Transform(position, size));
             }
             else
             {
-                positions[palikka.Key] = position;
+                transfroms[palikka] = new Transform(position, size);
             }
 
-            if (!sizes.ContainsKey(palikka.Key))
+            //Add rigidbody
+            if (!rigidBodies.ContainsKey(palikka))
             {
-                sizes.Add(palikka.Key, size);
+                rigidBodies.Add(palikka, new RigidBody(size));
             }
             else
             {
-                sizes[palikka.Key] = size;
+                rigidBodies[palikka] = new RigidBody(size);
             }
         }
     }
