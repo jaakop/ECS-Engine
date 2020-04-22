@@ -34,6 +34,8 @@ namespace ReeGame
 
         protected override void Initialize()
         {
+            Entity.InitializeKeyIndex();
+
             IsMouseVisible = true;
             movementSpeed = 7;
             mousePressed = false;
@@ -115,6 +117,8 @@ namespace ReeGame
             }
 
             PhysicsSystem.MoveEntity(palikka1, velocity, ref transfroms, rigidBodies);
+
+            camera.Position = transfroms[palikka1].Position;
 
             base.Update(gameTime);
         }

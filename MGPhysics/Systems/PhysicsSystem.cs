@@ -29,30 +29,30 @@ namespace MGPhysics.Systems
                 if (!rigidBodies.ContainsKey(targetObject.Key))
                     continue;
 
-                Vector entityPosition = targetObject.Value.Position;
-                Vector entityHitBox = rigidBodies[targetObject.Key].HitBox;
+                Vector targetPosition = targetObject.Value.Position;
+                Vector targetHitBox = rigidBodies[targetObject.Key].HitBox;
 
-                if (CheckCollissions(adjustedPosition, hitbox, entityPosition, entityHitBox))
+                if (CheckCollissions(adjustedPosition, hitbox, targetPosition, targetHitBox))
                 {
                     collidedEntities.Add(targetObject.Key);
 
-                    int distX = (int)Math.Round(Math.Abs(position.X - entityPosition.X) - entityHitBox.X / 2);
-                    int distY = (int)Math.Round(Math.Abs(position.Y - entityPosition.Y) - entityHitBox.Y / 2);
+                    int distX = (int)Math.Round(Math.Abs(position.X - targetPosition.X) - targetHitBox.X / 2);
+                    int distY = (int)Math.Round(Math.Abs(position.Y - targetPosition.Y) - targetHitBox.Y / 2);
 
                     if (distX >= distY)
                     {
                         if (velocity.X > 0)
-                            adjustedPosition.X = entityPosition.X - entityHitBox.X / 2 - hitbox.X / 2;
+                            adjustedPosition.X = targetPosition.X - targetHitBox.X / 2 - hitbox.X / 2;
                         else
-                            adjustedPosition.X = entityPosition.X + entityHitBox.X / 2 + hitbox.X / 2;
+                            adjustedPosition.X = targetPosition.X + targetHitBox.X / 2 + hitbox.X / 2;
                     }
 
                     if (distX <= distY)
                     {
                         if (velocity.Y > 0)
-                            adjustedPosition.Y = entityPosition.Y - entityHitBox.Y / 2 - hitbox.Y / 2;
+                            adjustedPosition.Y = targetPosition.Y - targetHitBox.Y / 2 - hitbox.Y / 2;
                         else
-                            adjustedPosition.Y = entityPosition.Y + entityHitBox.Y / 2 + hitbox.Y / 2;
+                            adjustedPosition.Y = targetPosition.Y + targetHitBox.Y / 2 + hitbox.Y / 2;
                     }
                 }
             }
@@ -82,13 +82,13 @@ namespace MGPhysics.Systems
                 if (!rigidBodies.ContainsKey(targetObject.Key))
                     continue;
 
-                Vector entityPosition = targetObject.Value.Position;
-                Vector entityHitBox = rigidBodies[targetObject.Key].HitBox;
+                Vector targetPosition = targetObject.Value.Position;
+                Vector targetHitBox = rigidBodies[targetObject.Key].HitBox;
 
-                if (entityPosition.X + entityHitBox.X / 2 > position.X - hitbox.X / 2
-                    && entityPosition.X - entityHitBox.X / 2 < position.X + hitbox.X / 2
-                    && entityPosition.Y + entityHitBox.Y / 2 > position.Y - hitbox.Y / 2
-                    && entityPosition.Y - entityHitBox.Y / 2 < position.Y + hitbox.Y / 2)
+                if (targetPosition.X + targetHitBox.X / 2 > position.X - hitbox.X / 2
+                    && targetPosition.X - targetHitBox.X / 2 < position.X + hitbox.X / 2
+                    && targetPosition.Y + targetHitBox.Y / 2 > position.Y - hitbox.Y / 2
+                    && targetPosition.Y - targetHitBox.Y / 2 < position.Y + hitbox.Y / 2)
                 {
                     collidedEntities.Add(targetObject.Key);
                 }

@@ -21,11 +21,19 @@ namespace MGPhysics
             return new Entity(keyIndex - 1);
         }
 
+        /// <summary>
+        /// Initializes entity key index
+        /// </summary>
         public static void InitializeKeyIndex()
         {
             keyIndex = 0;
         }
 
+        /// <summary>
+        /// Initializes entity key index
+        /// </summary>
+        /// <param name="newKeyIndex">number to set the index to</param>
+        /// <remarks>Do not use this unless you are sure what you are doiing</remarks>
         public static void InitializeKeyIndex(int newKeyIndex)
         {
             keyIndex = newKeyIndex;
