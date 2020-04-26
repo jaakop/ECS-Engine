@@ -46,7 +46,8 @@ namespace MGPhysics.Components
         /// <returns>Normalized <code>Vector</code></returns>
         public static Vector GetVectorFromAngle(float angle)
         {
-            return new Vector((float)Math.Cos(angle), (float)Math.Sin(angle));
+            double convertedAngle = angle * (Math.PI / 180);
+            return new Vector((float)Math.Cos(angle * (Math.PI / 180)), (float)Math.Sin(angle * (Math.PI / 180)));
         }
 
         /// <summary>
@@ -56,7 +57,10 @@ namespace MGPhysics.Components
         /// <returns></returns>
         public static float GetAngleFromVector(Vector vector)
         {
-            return (float)Math.Tanh(vector.Y / vector.X);
+            float angle = (float)(Math.Acos(vector.X / 1) * 180 / Math.PI);
+            if (vector.Y < 0)
+                return 360-angle;
+            return angle;
         }
 
         //Operators
@@ -153,28 +157,6 @@ namespace MGPhysics.Components
         {
             return new Vector(a.X * b, a.Y * b);
         }
-        
-        /// <summary>
-        /// Return the X value as rounded integer
-        /// </summary>
-        public int IntegerX
-        {
-            get
-            {
-                return (int)Math.Round(X);
-            }
-        }
-
-        /// <summary>
-        /// Return the Y value as rounded integer
-        /// </summary>
-        public int IntegerY
-        {
-            get
-            {
-            return (int)Math.Round(Y);
-            }
-        }
 
         /// <summary>
         /// Interpolates two vector by t
@@ -195,7 +177,10 @@ namespace MGPhysics.Components
         public Vector Normalize()
         {
             float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
-            return new Vector(X / lenght, Y / lenght);
+
+            if(lenght != 0)
+                return new Vector(X / lenght, Y / lenght);
+            return new Vector(0, 0);
         }
     }
 }
