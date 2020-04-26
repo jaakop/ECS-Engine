@@ -14,23 +14,22 @@ namespace MGPhysics.Systems
         /// <summary>
         /// Draws sprites on to screen
         /// </summary>
-        /// <param name="sprites">Dictionary of sprites to draw</param>
-        /// <param name="positions">Dictionary of positions to draw the sprites to</param>
-        /// <param name="sizes">Dictionary of sizes for the sprites</param>
-        /// <param name="spriteBatch">Spritebatch to draw with</param>
-        public static void RenderSprites(Dictionary<int, Sprite> sprites, Dictionary<int, Vector> positions, Dictionary<int, Vector> sizes, SpriteBatch spriteBatch)
+        /// <param name="sprites">Dictionary of the drawabel sprites</param>
+        /// <param name="transfroms">Dictionary of transfroms</param>
+        /// <param name="spriteBatch">SpriteBatch to draw the sprites with</param>
+        public static void RenderSprites(Dictionary<Entity, Sprite> sprites, Dictionary<Entity, Transform> transfroms, SpriteBatch spriteBatch)
         {
-            foreach(KeyValuePair<int, Sprite> sprite in sprites)
+            foreach(KeyValuePair<Entity, Sprite> sprite in sprites)
             {
-                Vector position = new Vector(0, 0);
-                Vector size = new Vector(sprite.Value.Texture.Width, sprite.Value.Texture.Height);
+                if (!transfroms.ContainsKey(sprite.Key))
+                    continue;
 
-                if (positions.ContainsKey(sprite.Key))
-                    position = positions[sprite.Key];
-                if (sizes.ContainsKey(sprite.Key))
-                    size = sizes[sprite.Key];
+                Transform transform = transfroms[sprite.Key];
 
-                spriteBatch.Draw(sprite.Value.Texture, new Rectangle(position.IntegerX - size.IntegerX/2, position.IntegerY - size.IntegerY / 2, size.IntegerX, size.IntegerY), sprite.Value.ColorMask);
+                spriteBatch.Draw(sprite.Value.Texture, 
+                                 new Rectangle(transform.Position.IntegerX - transform.Size.IntegerX/2, transform.Position.IntegerY - transform.Size.IntegerY / 2, 
+                                                transform.Size.IntegerX, transform.Size.IntegerY), 
+                                 sprite.Value.ColorMask);
             }
         }
     }
