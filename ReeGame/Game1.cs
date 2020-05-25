@@ -47,7 +47,8 @@ namespace ReeGame
             sprites = new Dictionary<Entity, Sprite>();
 
             targetPalikka = Entity.NewEntity();
-            // TODO: Add your initialization logic here
+            CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
+            
             palikka1 = Entity.NewEntity();
             CreatePalikka(palikka1, new Vector(150, -50), new Vector(100, 100));
             Entity palikka = Entity.NewEntity();
@@ -86,9 +87,9 @@ namespace ReeGame
             {
                 if (GraphicsDevice.Viewport.Bounds.Contains(mouseState.Position))
                 {
-                    Vector2 mousePosition = new Vector2(camera.Position.X + mouseState.Position.X / camera.Zoom - GraphicsDevice.Viewport.Width,
+                    Vector mousePosition = new Vector(camera.Position.X + mouseState.Position.X / camera.Zoom - GraphicsDevice.Viewport.Width,
                                                         camera.Position.Y + mouseState.Position.Y / camera.Zoom - GraphicsDevice.Viewport.Height);
-                    CreatePalikka(targetPalikka, new Vector((int)mousePosition.X, (int)mousePosition.Y), new Vector(25, 25));
+                    CreateTransform(targetPalikka, mousePosition, new Vector(25, 25));
                     mousePressed = true;
                 }
             }
