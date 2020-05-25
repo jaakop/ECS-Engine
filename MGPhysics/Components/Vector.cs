@@ -63,6 +63,18 @@ namespace MGPhysics.Components
             return angle;
         }
 
+        /// <summary>
+        /// Distance between two points
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float Distance(Vector a, Vector b)
+        {
+            Vector hyp = b - a;
+            return (float)Math.Sqrt(hyp.X * hyp.X + hyp.Y * hyp.Y);
+        }
+
         //Operators
         /// <summary>
         /// Adds two Vector together
@@ -159,7 +171,19 @@ namespace MGPhysics.Components
         }
 
         /// <summary>
-        /// Interpolates two vector by t
+        /// Interpolates two vectors by t
+        /// </summary>
+        /// <param name="start">Starting point</param>
+        /// <param name="end">End point</param>
+        /// <param name="t">The interpolant</param>
+        /// <returns></returns>
+        public static Vector Interpolate(Vector start, Vector end, float t)
+        {
+            return start + (end - start) * t;
+        }
+
+        /// <summary>
+        /// Lerps two vectors by t
         /// </summary>
         /// <param name="start">Starting point</param>
         /// <param name="end">End point</param>
@@ -167,7 +191,7 @@ namespace MGPhysics.Components
         /// <returns></returns>
         public static Vector Lerp(Vector start, Vector end, float t)
         {
-            return start + (end - start) * t;
+            return (end - start) * t;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 namespace ReeGame
 {
@@ -47,15 +48,17 @@ namespace ReeGame
             sprites = new Dictionary<Entity, Sprite>();
 
             targetPalikka = Entity.NewEntity();
-            // TODO: Add your initialization logic here
+            CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
+            
             palikka1 = Entity.NewEntity();
-            CreatePalikka(palikka1, new Vector(100, 100), new Vector(150, -50));
+            CreatePalikka(palikka1, new Vector(25, -200), new Vector(100, 100));
+
             Entity palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(100, 100), new Vector(300, 100));
+            CreatePalikka(palikka, new Vector(300, 100), new Vector(100, 100));
             palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(100, 100), new Vector(50, 450));
+            CreatePalikka(palikka, new Vector(50, 450), new Vector(100, 100));
             palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(100, 50), new Vector(-100, -100));
+            CreatePalikka(palikka, new Vector(-100, -100), new Vector(100, 50));
 
             base.Initialize();
         }
@@ -77,6 +80,7 @@ namespace ReeGame
         protected override void Update(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -86,9 +90,9 @@ namespace ReeGame
             {
                 if (GraphicsDevice.Viewport.Bounds.Contains(mouseState.Position))
                 {
-                    Vector2 mousePosition = new Vector2(camera.Position.X + mouseState.Position.X / camera.Zoom - GraphicsDevice.Viewport.Width,
+                    Vector mousePosition = new Vector(camera.Position.X + mouseState.Position.X / camera.Zoom - GraphicsDevice.Viewport.Width,
                                                         camera.Position.Y + mouseState.Position.Y / camera.Zoom - GraphicsDevice.Viewport.Height);
-                    CreatePalikka(targetPalikka, new Vector(25, 25), new Vector((int)mousePosition.X, (int)mousePosition.Y));
+                    CreateTransform(targetPalikka, mousePosition, new Vector(25, 25));
                     mousePressed = true;
                 }
             }
@@ -98,7 +102,7 @@ namespace ReeGame
             }
 
             Vector velocity = new Vector(0,0);
-
+            /*
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 velocity += new Vector(0, -1 * movementSpeed);
@@ -115,6 +119,15 @@ namespace ReeGame
             {
                 velocity += new Vector(1 * movementSpeed, 0);
             }
+            */
+
+            if(transfroms.ContainsKey(targetPalikka))
+                velocity = Vector.Lerp(transfroms[palikka1].Position, transfroms[targetPalikka].Position, 0.1f) * movementSpeed;
+
+            if (Math.Abs(velocity.X) > movementSpeed)
+                velocity.X = (velocity.X / Math.Abs(velocity.X)) * movementSpeed;
+            if (Math.Abs(velocity.Y) > movementSpeed)
+                velocity.Y = (velocity.Y / Math.Abs(velocity.Y)) * movementSpeed;
 
             PhysicsSystem.MoveEntity(palikka1, velocity, ref transfroms, rigidBodies);
 
@@ -134,40 +147,62 @@ namespace ReeGame
             base.Draw(gameTime);
         }
 
-        void CreatePalikka(Entity palikka, Vector size, Vector position)
+        void CreatePalikka(Entity palikka, Vector position, Vector size)
         {
-            Texture2D basicTexture = new Texture2D(GraphicsDevice, 1, 1);
-            basicTexture.SetData(new Color[] { Color.White });
-
             //Add sprite
-            if (!sprites.ContainsKey(palikka))
-            {
-                sprites.Add(palikka, new Sprite(basicTexture, Color.White));
-            }
-            else
-            {
-                sprites[palikka] = new Sprite(basicTexture, Color.White);
-            }
+            CreateSprite(palikka, BasicTexture(Color.White), Color.White);
 
             //Add transform
-            if (!transfroms.ContainsKey(palikka))
-            {
-                transfroms.Add(palikka, new Transform(position, size));
-            }
-            else
-            {
-                transfroms[palikka] = new Transform(position, size);
-            }
+            CreateTransform(palikka, position, size);
 
             //Add rigidbody
-            if (!rigidBodies.ContainsKey(palikka))
+            CreateRigidBody(palikka, size);
+        }
+
+        void CreateSprite(Entity entity, Texture2D texture, Color color)
+        {
+
+            if (!sprites.ContainsKey(entity))
             {
-                rigidBodies.Add(palikka, new RigidBody(size));
+                sprites.Add(entity, new Sprite(texture, color));
             }
             else
             {
-                rigidBodies[palikka] = new RigidBody(size);
+                sprites[entity] = new Sprite(texture, color);
             }
+
+        }
+
+        void CreateTransform(Entity entity, Vector position, Vector size)
+        {
+            if (!transfroms.ContainsKey(entity))
+            {
+                transfroms.Add(entity, new Transform(position, size));
+            }
+            else
+            {
+                transfroms[entity] = new Transform(position, size);
+            }
+        }
+
+        void CreateRigidBody(Entity entity, Vector size)
+        {
+            if (!rigidBodies.ContainsKey(entity))
+            {
+                rigidBodies.Add(entity, new RigidBody(size));
+            }
+            else
+            {
+                rigidBodies[entity] = new RigidBody(size);
+            }
+        }
+
+        Texture2D BasicTexture(Color color)
+        {
+            Texture2D basicTexture = new Texture2D(GraphicsDevice, 1, 1);
+            basicTexture.SetData(new Color[] { color });
+
+            return basicTexture;
         }
     }
 }
