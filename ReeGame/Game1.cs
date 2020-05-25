@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 namespace ReeGame
 {
@@ -50,7 +51,8 @@ namespace ReeGame
             CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
             
             palikka1 = Entity.NewEntity();
-            CreatePalikka(palikka1, new Vector(150, -50), new Vector(100, 100));
+            CreatePalikka(palikka1, new Vector(25, -200), new Vector(100, 100));
+
             Entity palikka = Entity.NewEntity();
             CreatePalikka(palikka, new Vector(300, 100), new Vector(100, 100));
             palikka = Entity.NewEntity();
@@ -78,6 +80,7 @@ namespace ReeGame
         protected override void Update(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -99,7 +102,7 @@ namespace ReeGame
             }
 
             Vector velocity = new Vector(0,0);
-
+            /*
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 velocity += new Vector(0, -1 * movementSpeed);
@@ -116,6 +119,15 @@ namespace ReeGame
             {
                 velocity += new Vector(1 * movementSpeed, 0);
             }
+            */
+
+            if(transfroms.ContainsKey(targetPalikka))
+                velocity = Vector.Lerp(transfroms[palikka1].Position, transfroms[targetPalikka].Position, 0.1f) * movementSpeed;
+
+            if (Math.Abs(velocity.X) > movementSpeed)
+                velocity.X = (velocity.X / Math.Abs(velocity.X)) * movementSpeed;
+            if (Math.Abs(velocity.Y) > movementSpeed)
+                velocity.Y = (velocity.Y / Math.Abs(velocity.Y)) * movementSpeed;
 
             PhysicsSystem.MoveEntity(palikka1, velocity, ref transfroms, rigidBodies);
 
