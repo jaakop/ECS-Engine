@@ -1,11 +1,16 @@
-﻿using MGPhysics;
-using MGPhysics.Components;
-using MGPhysics.Systems;
+﻿using System;
+using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System;
+
+using MGPhysics;
+using MGPhysics.Components;
+using MGPhysics.Systems;
+
+using ReeGame.Dictionaries;
+using ReeGame.Components;
 
 namespace ReeGame
 {
@@ -19,6 +24,9 @@ namespace ReeGame
         Dictionary<Entity, Transform> transfroms;
         Dictionary<Entity, RigidBody> rigidBodies;
         Dictionary<Entity, Sprite> sprites;
+
+        GroupDictionary groups;
+        GroupMemberDictionary groupMembers;
 
         int movementSpeed;
         bool mousePressed;
@@ -47,18 +55,16 @@ namespace ReeGame
             rigidBodies = new Dictionary<Entity, RigidBody>();
             sprites = new Dictionary<Entity, Sprite>();
 
+            groups = new GroupDictionary();
+            groupMembers = new GroupMemberDictionary();
+
             targetPalikka = Entity.NewEntity();
             CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
             
             palikka1 = Entity.NewEntity();
             CreatePalikka(palikka1, new Vector(25, -200), new Vector(100, 100));
 
-            Entity palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(300, 100), new Vector(100, 100));
-            palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(50, 450), new Vector(100, 100));
-            palikka = Entity.NewEntity();
-            CreatePalikka(palikka, new Vector(-100, -100), new Vector(100, 50));
+
 
             base.Initialize();
         }
@@ -147,6 +153,12 @@ namespace ReeGame
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Creates basic palikka with rigidbody
+        /// </summary>
+        /// <param name="palikka">Palikka Entity</param>
+        /// <param name="position">Position to set the palikka</param>
+        /// <param name="size">Size of the palikka</param>
         void CreatePalikka(Entity palikka, Vector position, Vector size)
         {
             //Add sprite
@@ -159,6 +171,12 @@ namespace ReeGame
             CreateRigidBody(palikka, size);
         }
 
+        /// <summary>
+        /// Creates a sprite component
+        /// </summary>
+        /// <param name="entity">Sprites entity</param>
+        /// <param name="texture">texture of the sprite</param>
+        /// <param name="color">Color mask</param>
         void CreateSprite(Entity entity, Texture2D texture, Color color)
         {
 
@@ -173,6 +191,12 @@ namespace ReeGame
 
         }
 
+        /// <summary>
+        /// Creates transform compomnent
+        /// </summary>
+        /// <param name="entity">Transforms Entity</param>
+        /// <param name="position">Position</param>
+        /// <param name="size">Size</param>
         void CreateTransform(Entity entity, Vector position, Vector size)
         {
             if (!transfroms.ContainsKey(entity))
@@ -185,6 +209,11 @@ namespace ReeGame
             }
         }
 
+        /// <summary>
+        /// Creates rigidBody component
+        /// </summary>
+        /// <param name="entity">Component entity</param>
+        /// <param name="size">size of the hitbox</param>
         void CreateRigidBody(Entity entity, Vector size)
         {
             if (!rigidBodies.ContainsKey(entity))
@@ -197,12 +226,48 @@ namespace ReeGame
             }
         }
 
+        /// <summary>
+        /// Creates a basic box texture
+        /// </summary>
+        /// <param name="color">Color of the box</param>
+        /// <returns></returns>
         Texture2D BasicTexture(Color color)
         {
             Texture2D basicTexture = new Texture2D(GraphicsDevice, 1, 1);
             basicTexture.SetData(new Color[] { color });
 
             return basicTexture;
+        }
+
+        /// <summary>
+        /// Creates a new group
+        /// </summary>
+        /// <param name="leaderEntity"></param>
+        void CreateNewGroup(Entity leaderEntity)
+        {
+            foreach(KeyValuePair<Entity, GroupComponent> group in groups)
+            {
+                if (group.Value.LeaderEntity == leaderEntity)
+                    throw new Exception("Cannot assing leader entity. Entity is leaderEntity of a another group");
+            }
+
+            groups.Add(Entity.NewEntity(), new GroupComponent(leaderEntity));
+
+            if (groupMembers.ContainsKey(leaderEntity))
+                groupMembers.Remove(leaderEntity);
+        }
+
+        /// <summary>
+        /// Adds an entity to a group
+        /// </summary>
+        /// <param name="member"></param>
+        /// <param name="group"></param>
+        void AddMemberToGroup(Entity member, Entity group)
+        {
+            if (groupMembers.ContainsKey(member))
+                groupMembers[member] = group;
+            else
+                groupMembers.Add(member, group);
         }
     }
 }
