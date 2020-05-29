@@ -264,7 +264,7 @@ namespace ReeGame
             foreach(KeyValuePair<Entity, GroupComponent> checkGroup in groups)
             {
                 if(checkGroup.Value.LeaderEntity == member)
-                    throw new Exception("Cannot assing leader entity. Entity is leaderEntity of a another group");
+                    throw new Exception("Cannot assing member entity. Entity is leaderEntity of a another group");
 
                 checkGroup.Value.RemoveMember(member);
             }
