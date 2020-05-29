@@ -25,8 +25,7 @@ namespace ReeGame
         Dictionary<Entity, RigidBody> rigidBodies;
         Dictionary<Entity, Sprite> sprites;
 
-        GroupDictionary groups;
-        GroupMemberDictionary groupMembers;
+        Dictionary<Entity, GroupComponent> groups;
 
         int movementSpeed;
         bool mousePressed;
@@ -55,8 +54,7 @@ namespace ReeGame
             rigidBodies = new Dictionary<Entity, RigidBody>();
             sprites = new Dictionary<Entity, Sprite>();
 
-            groups = new GroupDictionary();
-            groupMembers = new GroupMemberDictionary();
+            groups = new Dictionary<Entity, GroupComponent>();
 
             targetPalikka = Entity.NewEntity();
             CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
@@ -249,12 +247,11 @@ namespace ReeGame
             {
                 if (group.Value.LeaderEntity == leaderEntity)
                     throw new Exception("Cannot assing leader entity. Entity is leaderEntity of a another group");
+
+                group.Value.RemoveMember(leaderEntity);
             }
 
             groups.Add(Entity.NewEntity(), new GroupComponent(leaderEntity));
-
-            if (groupMembers.ContainsKey(leaderEntity))
-                groupMembers.Remove(leaderEntity);
         }
 
         /// <summary>
@@ -264,10 +261,14 @@ namespace ReeGame
         /// <param name="group"></param>
         void AddMemberToGroup(Entity member, Entity group)
         {
-            if (groupMembers.ContainsKey(member))
-                groupMembers[member] = group;
-            else
-                groupMembers.Add(member, group);
+            foreach(KeyValuePair<Entity, GroupComponent> checkGroup in groups)
+            {
+                if(checkGroup.Value.LeaderEntity == member)
+                    throw new Exception("Cannot assing leader entity. Entity is leaderEntity of a another group");
+
+                checkGroup.Value.RemoveMember(member);
+            }
+            groups[group].members.Add(member);
         }
     }
 }
