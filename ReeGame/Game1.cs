@@ -18,8 +18,6 @@ namespace ReeGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Entity palikka1;
-
         Dictionary<Entity, Transform> transfroms;
         Dictionary<Entity, RigidBody> rigidBodies;
         Dictionary<Entity, Sprite> sprites;
@@ -28,7 +26,10 @@ namespace ReeGame
 
         int movementSpeed;
         bool mousePressed;
+
+        Entity palikka1;
         Entity targetPalikka;
+        Entity group;
 
         Camera2D camera;
 
@@ -59,7 +60,16 @@ namespace ReeGame
             CreateSprite(targetPalikka, BasicTexture(Color.HotPink), Color.White);
             
             palikka1 = Entity.NewEntity();
-            CreatePalikka(palikka1, new Vector(25, -200), new Vector(100, 100));
+            CreatePalikka(palikka1, new Vector(0, 0), new Vector(100, 100));
+
+            group = CreateNewGroup(palikka1);
+
+            for(int i = 0; i < 10; i++)
+            {
+                Entity palikka = Entity.NewEntity();
+                CreatePalikka(palikka, new Vector(0, 100 + 100 * i), new Vector(75, 75));
+                AddMemberToGroup(palikka, group);
+            }
 
             base.Initialize();
         }
@@ -132,6 +142,11 @@ namespace ReeGame
 
             PhysicsSystem.MoveEntity(palikka1, velocity, ref transfroms, rigidBodies);
 
+            foreach(Entity member in groups[group].Members)
+            {
+                PhysicsSystem.MoveEntity(member, new Vector(1, 0), ref transfroms, rigidBodies);
+            }
+
             camera.Position = transfroms[palikka1].Position;
 
             base.Update(gameTime);
@@ -147,7 +162,7 @@ namespace ReeGame
             spriteBatch.End();
             base.Draw(gameTime);
         }
-
+        
         /// <summary>
         /// Creates basic palikka with rigidbody
         /// </summary>
@@ -238,7 +253,7 @@ namespace ReeGame
         /// Creates a new group
         /// </summary>
         /// <param name="leaderEntity"></param>
-        void CreateNewGroup(Entity leaderEntity)
+        Entity CreateNewGroup(Entity leaderEntity)
         {
             foreach(KeyValuePair<Entity, GroupComponent> group in groups)
             {
@@ -247,8 +262,9 @@ namespace ReeGame
 
                 group.Value.RemoveMember(leaderEntity);
             }
-
-            groups.Add(Entity.NewEntity(), new GroupComponent(leaderEntity));
+            Entity groupEntity = Entity.NewEntity();
+            groups.Add(groupEntity, new GroupComponent(leaderEntity));
+            return groupEntity;
         }
 
         /// <summary>
@@ -265,7 +281,7 @@ namespace ReeGame
 
                 checkGroup.Value.RemoveMember(member);
             }
-            groups[group].members.Add(member);
+            groups[group].Members.Add(member);
         }
     }
 }

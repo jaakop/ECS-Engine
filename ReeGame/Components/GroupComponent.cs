@@ -12,12 +12,12 @@ namespace ReeGame.Components
     public struct GroupComponent : IComponent
     {
         public Entity LeaderEntity { get; set; }
-        public List<Entity> members { get; set; }
+        public List<Entity> Members { get; set; }
 
         public GroupComponent(Entity leaderEntity)
         {
             LeaderEntity = leaderEntity;
-            members = new List<Entity>();
+            Members = new List<Entity>();
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ReeGame.Components
             if (LeaderEntity == entity)
                 return true;
 
-            return members.Contains(entity);
+            return Members.Contains(entity);
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace ReeGame.Components
         /// <param name="entity">Entity to remove</param>
         public void RemoveMember(Entity entity)
         {
-            for(int i = 0; i < members.Count; i++)
+            for(int i = 0; i < Members.Count; i++)
             {
-                if (members[i] == entity)
-                    members.RemoveAt(i);
+                if (Members[i] == entity)
+                    Members.RemoveAt(i);
             }
         }
     }
