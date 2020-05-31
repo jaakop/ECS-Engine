@@ -30,13 +30,7 @@ namespace ReeGame.Components
             if (LeaderEntity == entity)
                 return true;
 
-            foreach(Entity member in members)
-            {
-                if (member == entity)
-                    return true;
-            }
-
-            return false;
+            return members.Contains(entity);
         }
 
         /// <summary>
