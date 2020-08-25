@@ -171,6 +171,28 @@ namespace MGPhysics.Components
         }
 
         /// <summary>
+        /// Compere vectors
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(Vector a, Vector b)
+        {
+            return a.X == b.X && a.Y == b.Y;
+        }
+
+        /// <summary>
+        /// Compare vectors inverted
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(Vector a, Vector b)
+        {
+            return a.X != b.X && a.Y != b.Y;
+        }
+
+        /// <summary>
         /// Interpolates two vectors by t
         /// </summary>
         /// <param name="start">Starting point</param>
