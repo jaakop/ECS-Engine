@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PhysicsTesting
+namespace VectorTesting
 {
     [TestClass]
     public class VectorMathTest

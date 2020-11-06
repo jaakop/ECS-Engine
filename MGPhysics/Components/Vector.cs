@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MGPhysics.Components
 {
-    public struct Vector : IComponent
+    public struct Vector : IComponent, IComparable
     {
         public float X { get; set; }
         public float Y { get; set; }
@@ -37,6 +37,37 @@ namespace MGPhysics.Components
             {
             return (int)Math.Round(Y);
             }
+        }
+
+        /// <summary>
+        /// Make a unit vector
+        /// </summary>
+        /// <returns>A unit vector</returns>
+        public Vector Normalize()
+        {
+            float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+
+            if(lenght != 0)
+                return new Vector(X / lenght, Y / lenght);
+            return new Vector(0, 0);
+        }
+
+        /// <summary>
+        /// Compares this vector to another one
+        /// </summary>
+        /// <param name="obj">Vector to be compared with</param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            if(obj.GetType().Equals(typeof(Vector))) throw new ArgumentException("Object is not a Vector");
+
+            Vector comparisonVector = (Vector)obj;
+
+            if (X + Y > comparisonVector.X + comparisonVector.Y) return 1;
+            if (X + Y < comparisonVector.X + comparisonVector.Y) return -1;
+            return 0;
         }
          
         /// <summary>
@@ -73,6 +104,30 @@ namespace MGPhysics.Components
         {
             Vector hyp = b - a;
             return (float)Math.Sqrt(hyp.X * hyp.X + hyp.Y * hyp.Y);
+        }
+
+        /// <summary>
+        /// Interpolates two vectors by t
+        /// </summary>
+        /// <param name="start">Starting point</param>
+        /// <param name="end">End point</param>
+        /// <param name="t">The interpolant</param>
+        /// <returns></returns>
+        public static Vector Interpolate(Vector start, Vector end, float t)
+        {
+            return start + (end - start) * t;
+        }
+
+        /// <summary>
+        /// Lerps two vectors by t
+        /// </summary>
+        /// <param name="start">Starting point</param>
+        /// <param name="end">End point</param>
+        /// <param name="t">The interpolant</param>
+        /// <returns></returns>
+        public static Vector Lerp(Vector start, Vector end, float t)
+        {
+            return (end - start) * t;
         }
 
         //Operators
@@ -192,41 +247,5 @@ namespace MGPhysics.Components
             return a.X != b.X && a.Y != b.Y;
         }
 
-        /// <summary>
-        /// Interpolates two vectors by t
-        /// </summary>
-        /// <param name="start">Starting point</param>
-        /// <param name="end">End point</param>
-        /// <param name="t">The interpolant</param>
-        /// <returns></returns>
-        public static Vector Interpolate(Vector start, Vector end, float t)
-        {
-            return start + (end - start) * t;
-        }
-
-        /// <summary>
-        /// Lerps two vectors by t
-        /// </summary>
-        /// <param name="start">Starting point</param>
-        /// <param name="end">End point</param>
-        /// <param name="t">The interpolant</param>
-        /// <returns></returns>
-        public static Vector Lerp(Vector start, Vector end, float t)
-        {
-            return (end - start) * t;
-        }
-
-        /// <summary>
-        /// Make a unit vector
-        /// </summary>
-        /// <returns>A unit vector</returns>
-        public Vector Normalize()
-        {
-            float lenght = (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
-
-            if(lenght != 0)
-                return new Vector(X / lenght, Y / lenght);
-            return new Vector(0, 0);
-        }
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGPhysics", "MGPhysics\MGPhysics.csproj", "{F5219267-8C15-4B96-9F41-B0A4F7984C2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicsTesting", "PhysicsTesting\PhysicsTesting.csproj", "{A0BAAEA4-FC43-422A-A4B0-665980E0D5BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "PhysicsTesting\Tests.csproj", "{A0BAAEA4-FC43-422A-A4B0-665980E0D5BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
