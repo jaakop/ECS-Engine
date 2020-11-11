@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MGPhysics.Components
 {
-    public struct Vector : IComponent, IComparable
+    public struct Vector : IComponent, IComparable<Vector>
     {
         public float X { get; set; }
         public float Y { get; set; }
@@ -57,11 +57,9 @@ namespace MGPhysics.Components
         /// </summary>
         /// <param name="obj">Vector to be compared with</param>
         /// <returns></returns>
-        public int CompareTo(object obj)
+        public int CompareTo(Vector obj)
         {
             if (obj == null) return 1;
-
-            if(obj.GetType().Equals(typeof(Vector))) throw new ArgumentException("Object is not a Vector");
 
             Vector comparisonVector = (Vector)obj;
 
