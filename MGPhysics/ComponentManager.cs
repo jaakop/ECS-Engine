@@ -57,12 +57,26 @@ namespace MGPhysics
             }
             return entities;
         }
+
+        public void EntityDestroyed(Entity entity)
+        {
+            foreach(KeyValuePair<Type, int> entries in typeIndexArray)
+            {
+                componentArrays[entries.Value].EntityDestroyed(entity);
+            }
+        }
     }
     public struct ComponentArray<T> : IComponentArray where T : IComponent
     {
         public Dictionary<Entity, T> Array { get; }
+
+        void IComponentArray.EntityDestroyed(Entity entity)
+        {
+            Array.Remove(entity);
+        }
     }
     public interface IComponentArray
     {
+        void EntityDestroyed(Entity entity);
     }
 }
