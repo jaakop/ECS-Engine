@@ -12,6 +12,11 @@ namespace MGPhysics
     {
 
     }
+    public interface IComponentArray
+    {
+        void EntityDestroyed(Entity entity);
+    }
+
     public class ComponentManager : IComponentManager
     {
         private List<IComponentArray> componentArrays;
@@ -66,6 +71,7 @@ namespace MGPhysics
             }
         }
     }
+
     public struct ComponentArray<T> : IComponentArray where T : IComponent
     {
         public Dictionary<Entity, T> Array { get; }
@@ -74,9 +80,5 @@ namespace MGPhysics
         {
             Array.Remove(entity);
         }
-    }
-    public interface IComponentArray
-    {
-        void EntityDestroyed(Entity entity);
     }
 }
