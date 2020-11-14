@@ -14,7 +14,7 @@ namespace MGPhysics
     }
     public class ComponentManager : IComponentManager
     {
-        private List<IComponentArray> componenArrays;
+        private List<IComponentArray> componentArrays;
         private Dictionary<Type, int> typeIndexArray;
         private int arrayIndex;
 
@@ -22,13 +22,13 @@ namespace MGPhysics
         {
             arrayIndex = 0;
             typeIndexArray = new Dictionary<Type, int>();
-            componenArrays = new List<IComponentArray>();
+            componentArrays = new List<IComponentArray>();
         }
 
         public void RegisterComponent<T>() where T : IComponent
         {
             typeIndexArray.Add(typeof(T), arrayIndex);
-            componenArrays.Add(new ComponentArray<T>());
+            componentArrays.Add(new ComponentArray<T>());
             arrayIndex++;
         }
 
@@ -36,7 +36,7 @@ namespace MGPhysics
         {
             if (typeIndexArray.ContainsKey(typeof(T))) throw new Exception("Compnent is not registered");
 
-            return (ComponentArray<T>)componenArrays[typeIndexArray[typeof(T)]];
+            return (ComponentArray<T>)componentArrays[typeIndexArray[typeof(T)]];
         }
 
         public T GetComponent<T>(Entity entity) where T : IComponent
@@ -46,6 +46,16 @@ namespace MGPhysics
             if (!array.Array.ContainsKey(entity)) throw new IndexOutOfRangeException("This entity does not have this component");
 
             return GetComponentArray<T>().Array[entity];
+        }
+
+        public List<Entity> GetEntitiesWithComponent<T>(T component) where T : IComponent
+        {
+            List<Entity> entities = new List<Entity>();
+            foreach(KeyValuePair<Entity, T> entry in GetComponentArray<T>().Array)
+            {
+                entities.Add(entry.Key);
+            }
+            return entities;
         }
     }
     public struct ComponentArray<T> : IComponentArray where T : IComponent
