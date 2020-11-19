@@ -17,7 +17,7 @@ namespace MGPhysics
         void EntityDestroyed(Entity entity);
     }
 
-opublic class ComponentManager : IComponentManager
+    public class ComponentManager : IComponentManager
     {
         private List<IComponentArray> componentArrays;
         private Dictionary<Type, int> typeIndexArray;
