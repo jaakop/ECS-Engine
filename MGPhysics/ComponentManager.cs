@@ -55,7 +55,7 @@ namespace MGPhysics
         /// <returns>Component array</returns>
         public ComponentArray<T> GetComponentArray<T>() where T : IComponent
         {
-            if (typeIndexArray.ContainsKey(typeof(T))) throw new Exception("Compnent is not registered");
+            if (!typeIndexArray.ContainsKey(typeof(T))) throw new Exception("Component is not registered");
 
             return (ComponentArray<T>)componentArrays[typeIndexArray[typeof(T)]];
         }
@@ -103,8 +103,13 @@ namespace MGPhysics
         }
     }
 
-    public struct ComponentArray<T> : IComponentArray where T : IComponent
+    public class ComponentArray<T> : IComponentArray where T : IComponent
     {
+        public ComponentArray()
+        {
+            Array = new Dictionary<Entity, T>();
+        }
+
         public Dictionary<Entity, T> Array { get; }
 
         /// <summary>

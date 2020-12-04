@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MGPhysics;
-
-namespace MGPhysics.Systems
+﻿namespace MGPhysics
 {
     public interface ISystem
     {

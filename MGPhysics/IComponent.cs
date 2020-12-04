@@ -1,4 +1,4 @@
-﻿namespace MGPhysics.Components
+﻿namespace MGPhysics
 {
     public interface IComponent
     {
