@@ -14,6 +14,10 @@ namespace MGPhysics
     }
     public interface IComponentArray
     {
+        /// <summary>
+        /// Removes all components of an entity from component arrays
+        /// </summary>
+        /// <param name="entity"></param>
         void EntityDestroyed(Entity entity);
     }
 
@@ -23,6 +27,9 @@ namespace MGPhysics
         private Dictionary<Type, int> typeIndexArray;
         private int arrayIndex;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ComponentManager()
         {
             arrayIndex = 0;
@@ -30,6 +37,10 @@ namespace MGPhysics
             componentArrays = new List<IComponentArray>();
         }
 
+        /// <summary>
+        /// Registers a comopnent to the manager
+        /// </summary>
+        /// <typeparam name="T">Type of component</typeparam>
         public void RegisterComponent<T>() where T : IComponent
         {
             typeIndexArray.Add(typeof(T), arrayIndex);
@@ -37,6 +48,11 @@ namespace MGPhysics
             arrayIndex++;
         }
 
+        /// <summary>
+        /// Gets component array of a certain type
+        /// </summary>
+        /// <typeparam name="T">Component type</typeparam>
+        /// <returns>Component array</returns>
         public ComponentArray<T> GetComponentArray<T>() where T : IComponent
         {
             if (typeIndexArray.ContainsKey(typeof(T))) throw new Exception("Compnent is not registered");
@@ -44,6 +60,12 @@ namespace MGPhysics
             return (ComponentArray<T>)componentArrays[typeIndexArray[typeof(T)]];
         }
 
+        /// <summary>
+        /// Gets component of an entity
+        /// </summary>
+        /// <typeparam name="T">Component type</typeparam>
+        /// <param name="entity">Entity</param>
+        /// <returns>Component</returns>
         public T GetComponent<T>(Entity entity) where T : IComponent
         {
             ComponentArray<T> array = GetComponentArray<T>();
@@ -53,7 +75,12 @@ namespace MGPhysics
             return GetComponentArray<T>().Array[entity];
         }
 
-        public List<Entity> GetEntitiesWithComponent<T>(T component) where T : IComponent
+        /// <summary>
+        /// Gets all entities with a certain component
+        /// </summary>
+        /// <typeparam name="T">Component</typeparam>
+        /// <returns>List of entities with that component</returns>
+        public List<Entity> GetEntitiesWithComponent<T>() where T : IComponent
         {
             List<Entity> entities = new List<Entity>();
             foreach(KeyValuePair<Entity, T> entry in GetComponentArray<T>().Array)
@@ -63,6 +90,10 @@ namespace MGPhysics
             return entities;
         }
 
+        /// <summary>
+        /// Removes all components of an entity
+        /// </summary>
+        /// <param name="entity">Entity</param>
         public void EntityDestroyed(Entity entity)
         {
             foreach(KeyValuePair<Type, int> entries in typeIndexArray)
@@ -76,6 +107,10 @@ namespace MGPhysics
     {
         public Dictionary<Entity, T> Array { get; }
 
+        /// <summary>
+        /// Removes all components of an entity from component arrays
+        /// </summary>
+        /// <param name="entity"></param>
         void IComponentArray.EntityDestroyed(Entity entity)
         {
             Array.Remove(entity);

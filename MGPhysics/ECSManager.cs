@@ -10,28 +10,21 @@ namespace MGPhysics
 
     public class ECSManager : IECSManager
     {
-        private ComponentManager componentManager;
-        private SystemManager systemManager;
-        private EntityManager entityManager;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ECSManager()
         {
-            componentManager = new ComponentManager();
-            systemManager = new SystemManager();
-            entityManager = new EntityManager();
+            this.ComponentManager = new ComponentManager();
+            this.SystemManager = new SystemManager();
+            this.EntityManager = new EntityManager();
         }
 
         /// <summary>
         /// Component manager
         /// </summary>
         public ComponentManager ComponentManager {
-            get
-            {
-                return componentManager;
-            }
+            get;
         }
 
         /// <summary>
@@ -39,10 +32,7 @@ namespace MGPhysics
         /// </summary>
         public SystemManager SystemManager
         {
-            get
-            {
-                return systemManager;
-            }
+            get;
         }
 
         /// <summary>
@@ -50,10 +40,7 @@ namespace MGPhysics
         /// </summary>
         public EntityManager EntityManager
         {
-            get
-            {
-                return entityManager;
-            }
+            get;
         }
     }
 }
