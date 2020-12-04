@@ -11,14 +11,6 @@ namespace MGPhysics.Systems
     public interface ISystem
     {
         /// <summary>
-        /// Entity assigned to this system
-        /// </summary>
-        Entity AssignedEntity
-        {
-            get;
-        }
-
-        /// <summary>
         /// Method to be called every frame
         /// </summary>
         /// <param name="manager">Component manager to access components</param>
