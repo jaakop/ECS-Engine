@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MGPhysics.Systems;
+﻿using System.Collections.Generic;
 
 namespace MGPhysics
 {
@@ -39,11 +33,11 @@ namespace MGPhysics
         /// </summary>
         /// <param name="componentManager">Component manager for the components</param>
         /// <param name="deltaTime">Time since last update</param>
-        public void Update(ComponentManager componentManager, int deltaTime)
+        public void Update(ECSManager manager, int deltaTime)
         {
             foreach(ISystem system in registeredSystems)
             {
-                system.Call(componentManager, deltaTime);
+                system.Call(manager, deltaTime);
             }
             registeredSystems.Clear();
         }

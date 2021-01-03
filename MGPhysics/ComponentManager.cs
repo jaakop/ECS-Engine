@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MGPhysics.Components;
 
 namespace MGPhysics
 {
@@ -88,6 +83,17 @@ namespace MGPhysics
                 entities.Add(entry.Key);
             }
             return entities;
+        }
+
+        /// <summary>
+        /// Replaces a component in an array
+        /// </summary>
+        /// <typeparam name="T">Component</typeparam>
+        /// <param name="entity">Entity to wich the component belongs to</param>
+        /// <param name="replacer">Component to be replace existing one</param>
+        public void UpdateComponent<T>(Entity entity, T replacer) where T : IComponent
+        {
+            GetComponentArray<T>().Array[entity] = replacer;
         }
 
         /// <summary>
