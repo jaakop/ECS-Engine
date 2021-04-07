@@ -39,7 +39,6 @@ namespace MGPhysics
             {
                 system.Call(manager, deltaTime);
             }
-            registeredSystems.Clear();
         }
     }
 }
