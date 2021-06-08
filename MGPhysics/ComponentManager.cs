@@ -20,14 +20,12 @@ namespace MGPhysics
     {
         private List<IComponentArray> componentArrays;
         private Dictionary<Type, int> typeIndexArray;
-        private int arrayIndex;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ComponentManager()
         {
-            arrayIndex = 0;
             typeIndexArray = new Dictionary<Type, int>();
             componentArrays = new List<IComponentArray>();
         }
@@ -38,9 +36,8 @@ namespace MGPhysics
         /// <typeparam name="T">Type of component</typeparam>
         public void RegisterComponent<T>() where T : IComponent
         {
-            typeIndexArray.Add(typeof(T), arrayIndex);
+            typeIndexArray.Add(typeof(T), componentArrays.Count);
             componentArrays.Add(new ComponentArray<T>());
-            arrayIndex++;
         }
 
         /// <summary>
@@ -50,7 +47,7 @@ namespace MGPhysics
         /// <returns>Component array</returns>
         public ComponentArray<T> GetComponentArray<T>() where T : IComponent
         {
-            if (!typeIndexArray.ContainsKey(typeof(T))) throw new Exception("Component is not registered");
+            if (!typeIndexArray.ContainsKey(typeof(T))) throw new KeyNotFoundException("Component is not registered");
 
             return (ComponentArray<T>)componentArrays[typeIndexArray[typeof(T)]];
         }
